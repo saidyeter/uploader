@@ -1,7 +1,8 @@
 # uploader 
 
 ## to do 
-- [ ] move hardcoded config to env 
-- [ ] home page 
+- [x] move hardcoded config to env 
+- [x] home page 
 - [ ] fix the download api route 
 - [ ] create a consumer for rabbitmq messages
+- [ ] fix the upload file size limit

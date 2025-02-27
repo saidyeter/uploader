@@ -1,7 +1,7 @@
 import amqp from 'amqplib';
 
 export async function publishMessage(data: any) {
-  const connection = await amqp.connect(process.env?.RABBITMQ_URL ?? '');
+  const connection = await amqp.connect(process.env?.RABBITMQ_CONNECTION_STRING ?? '');
   const channel = await connection.createChannel();
 
   const exchange = process.env?.RABBITMQ_EXCHANGE_NAME;
@@ -18,13 +18,13 @@ export async function publishMessage(data: any) {
 }
 
 export async function subscribeToMessages(callback: (data: any) => void) {
-  const connection = await amqp.connect('amqp://admin:admin123@192.168.1.111:5672');
+  const connection = await amqp.connect(process.env?.RABBITMQ_CONNECTION_STRING ?? '');
   const channel = await connection.createChannel();
 
-  const exchange = 'file_uploads_exchange';
-  const queue = 'file_uploads_queue';
+  const exchange = process.env?.RABBITMQ_EXCHANGE_NAME;
+  const queue = process.env?.RABBITMQ_QUEUE_NAME;
 
-  await channel.assertExchange(exchange, 'fanout', { durable: true });
+  await channel.assertExchange(exchange, process.env?.RABBITMQ_EXCHANGE_TYPE, { durable: true });
   await channel.assertQueue(queue, { durable: true });
   await channel.bindQueue(queue, exchange, '');
 
